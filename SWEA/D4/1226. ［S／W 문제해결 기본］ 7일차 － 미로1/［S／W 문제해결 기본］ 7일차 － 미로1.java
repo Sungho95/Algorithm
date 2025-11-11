@@ -31,29 +31,37 @@ public class Solution {
 				}
 			}
 
-			dfs(1, 1);
-			// System.out.println("board = " + Arrays.deepToString(board));
+			Queue<int[]> queue = new LinkedList<>();
+			queue.offer(new int[] {1, 1});
+			visited[1][1] = true;
+
+			while (!queue.isEmpty()) {
+				int[] current = queue.poll();
+				int x = current[0];
+				int y = current[1];
+
+				for (int i = 0; i < 4; i++) {
+					int nx = x + dx[i];
+					int ny = y + dy[i];
+
+					if (nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE && !visited[nx][ny]) {
+						if (board[nx][ny] == 3) {
+							result = 1;
+							break;
+						}
+
+						if (board[nx][ny] != 1) {
+							visited[nx][ny] = true;
+							queue.offer(new int[] {nx, ny});
+						}
+					}
+				}
+			}
+
 			bw.write("#" + t + " " + result + "\n");
 		}
 		br.close();
 		bw.flush();
 		bw.close();
-	}
-
-	private static void dfs(final int x, final int y) {
-		if (board[x][y] == 3) {
-			result = 1;
-		}
-		
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-
-			if (nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE && !visited[nx][ny]) {
-				visited[nx][ny] = true;
-				dfs(nx, ny);
-				visited[nx][ny] = false;
-			}
-		}
 	}
 }
